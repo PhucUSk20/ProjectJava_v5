@@ -4,47 +4,48 @@ First, You need create DATABASE
     DROP DATABASE PROJECT;
     CREATE DATABASE PROJECT;
     USE PROJECT;
-    -- Create the ACCOUNT table.
+
     CREATE TABLE ACCOUNT (
         ID INT IDENTITY(1,1) PRIMARY KEY,
         USERNAME VARCHAR(255) NOT NULL,
         PASSWORD VARCHAR(255) NOT NULL,
         KIND VARCHAR(10) NOT NULL
     );
-    -- Create the CLASS table.
+
     CREATE TABLE CLASS (
         id INT PRIMARY KEY IDENTITY(1,1),
         name_class NVARCHAR(255) NOT NULL,
         name_subject NVARCHAR(255) NOT NULL,
         background NVARCHAR(255) NOT NULL
     );
-    -- Create the Students_List table with a foreign key reference.
-    DROP TABLE STUDENT_LIST;
+    
+    CREATE TABLE THAMGIA (
+	classid INT,
+	code_student NVARCHAR(255),
+	PRIMARY KEY (classid, code_student),
+	FOREIGN KEY (classid) REFERENCES CLASS(id),
+	FOREIGN KEY (code_student) REFERENCES STUDENT_LIST(code_student)
+    );
+   
     CREATE TABLE STUDENT_LIST (
-    	name_student NVARCHAR(255) ,
-    	code_student NVARCHAR(255) PRIMARY KEY,
-    	date_of_birth  DATE,
-    	class_id INT,
+	name_student NVARCHAR(255) ,
+	code_student NVARCHAR(255) PRIMARY KEY,
+	date_of_birth  DATE,
 	ImageData VARBINARY(MAX),
 	FaceVector VARBINARY(MAX),
 	Title NVARCHAR(255),
 	Distance FLOAT,
 	Id NVARCHAR(255),
-    	FOREIGN KEY (class_id) REFERENCES CLASS(id)
-	);
- 	DROP TABLE Attendance_List;
-	CREATE TABLE Attendance_List(
-	ID INT PRIMARY KEY IDENTITY(1,1),
-	Name NVARCHAR(255)
-	)
-    CREATE TABLE ATTEND_STUDENT_LIST(
-        unique_id INT PRIMARY KEY IDENTITY(1,1),
-        date_attendace DATE NOT NULL,
-        attendance NVARCHAR(255) NOT NULL,
-        classID INT NOT NULL,
-        Code_student NVARCHAR(255) NOT NULL,
-        FOREIGN KEY (classID) REFERENCES CLASS(id),
-        FOREIGN KEY (Code_student) REFERENCES STUDENT_LIST(code_student)
+    );
+    CREATE TABLE ATTENDANCE (
+	name_student NVARCHAR(255) ,
+	code_student NVARCHAR(255),
+	date_of_birth  DATE,
+	attendance_date DATE,
+	classId INT NOT NULL,
+        PRIMARY KEY (classid, code_student),
+	FOREIGN KEY (classId) REFERENCES CLASS(id),
+	FOREIGN KEY (code_student) REFERENCES STUDENT_LIST(code_student)
     );
  Insert data into the CLASS table.
 -----------------------------------------------------------------------
@@ -67,5 +68,3 @@ Then you need to adjust the IP of the network you are using as your local networ
       private static String username = "yourusername";
       private static String password = "yourpassword";
 
--- Insert data into the ATTEND_STUDENT_LIST.
-INSERT INTO ATTEND_STUDENT_LIST (date_attendace,attendance,classID,Code_student) VALUES ('2-10-2023','absent','1','20200314');
